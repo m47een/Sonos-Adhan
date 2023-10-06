@@ -3,8 +3,9 @@
     "timing": {
         "latitude": 53.3646586,
         "longitude": -2.2276166,
-        "method": 8,
-        "updateTime": "02:15"
+        "method": 12,
+        "updateTime": "02:15",
+        "school": 1
     },
     "prayers": [
         {
@@ -19,6 +20,11 @@
                 {
                     "name": "Front Bedroom",
                     "ip": "192.168.30.59",
+                    "volume": 10
+                },
+                {
+                    "name": "Living Room",
+                    "ip": "192.168.30.66",
                     "volume": 20
                 }
             ]
@@ -30,17 +36,17 @@
                 {
                     "name": "Small Bedroom",
                     "ip": "192.168.30.58",
-                    "volume": 10
+                    "volume": 30
                 },
                 {
                     "name": "Front Bedroom",
                     "ip": "192.168.30.59",
-                    "volume": 20
+                    "volume": 30
                 },
                 {
                     "name": "Living Room",
                     "ip": "192.168.30.66",
-                    "volume": 20
+                    "volume": 30
                 }
             ]
         },
@@ -51,12 +57,17 @@
                 {
                     "name": "Small Bedroom",
                     "ip": "192.168.30.58",
-                    "volume": 10
+                    "volume": 30
                 },
                 {
                     "name": "Front Bedroom",
                     "ip": "192.168.30.59",
-                    "volume": 20
+                    "volume": 30
+                },
+                {
+                    "name": "Living Room",
+                    "ip": "192.168.30.66",
+                    "volume": 30
                 }
             ]
         },
@@ -67,12 +78,17 @@
                 {
                     "name": "Small Bedroom",
                     "ip": "192.168.30.58",
-                    "volume": 10
+                    "volume": 30
                 },
                 {
                     "name": "Front Bedroom",
                     "ip": "192.168.30.59",
-                    "volume": 20
+                    "volume": 30
+                },
+                {
+                    "name": "Living Room",
+                    "ip": "192.168.30.66",
+                    "volume": 30
                 }
             ]
         },
@@ -83,12 +99,17 @@
                 {
                     "name": "Small Bedroom",
                     "ip": "192.168.30.58",
-                    "volume": 10
+                    "volume": 30
                 },
                 {
                     "name": "Front Bedroom",
                     "ip": "192.168.30.59",
-                    "volume": 20
+                    "volume": 30
+                },
+                {
+                    "name": "Living Room",
+                    "ip": "192.168.30.66",
+                    "volume": 30
                 }
             ]
         }          

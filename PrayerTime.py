@@ -86,6 +86,7 @@ def initZones(prayer):
 
 
 def getTimings():
+  print("timings update started")
   # clear any existing prayers from the schedule as about to be refreshed
   schedule.clear('prayer')
 
@@ -93,11 +94,14 @@ def getTimings():
   lon = conf["timing"]["longitude"]
   lat = conf["timing"]["latitude"]
   method = conf["timing"]["method"]
+  school = conf["timing"]["school"] 
 
-  url = f"http://api.aladhan.com/v1/timingsByAddress/{today}?address={lat},{lon}&method={method}"
-
+  url = f"http://api.aladhan.com/v1/timingsByAddress/{today}?address={lat},{lon}&method={method}&school={school}"
+  
   r = requests.get(url)
   timings = r.json()["data"]["timings"]
+
+  print(timings)
 
 
   for prayer in conf["prayers"]:
@@ -105,14 +109,17 @@ def getTimings():
     #initZones(prayer)
     schedule.every().day.at(timings[prayerName]).do(initZones, prayer).tag('prayer', prayerName)
 
+  print("timings update complete")
 
 #-----------------------------------------
 # MAIN ENTER POINT
 #-----------------------------------------
+print("app started")
 
-with open('config.json', 'r') as configjson:
+with open('./config/config.json', 'r') as configjson:
   conf = json.load(configjson)
 
+print("read config")
 restoreImmediately = conf["restoreImmediately"]
 
 # run immetdiately on startup to get timings
