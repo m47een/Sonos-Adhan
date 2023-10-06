@@ -20,9 +20,10 @@ def restoreZone(zone):
     zone.snapMedia.restore(fade=False)
 
 
-def playPrayer(zone, mediaUri, prayerName):
+def playPrayer(zone, mediaUri, prayerName, household):
   # play the prayer uri
   zone.play_uri(uri=mediaUri, title=prayerName)
+  print("playing for " + prayerName)
 
   # wait until playback finishes or is paused / stopped
   isplaying = True
@@ -30,6 +31,12 @@ def playPrayer(zone, mediaUri, prayerName):
     time.sleep(1)
     state = zone.get_current_transport_info()['current_transport_state']
     isplaying = state == "PLAYING" or state == "TRANSITIONING"
+
+  for member in zone.group.members:
+    member.unjoin()
+    
+  for zone in reversed(household):
+    restoreZone(zone)
 
 
 def initZones(prayer):
@@ -41,17 +48,21 @@ def initZones(prayer):
   mediaUri = prayer["file"]
 
   # get all speakers / zones
-  zones = []
+  households = {}
   speakers = prayer["speakers"]
   for speaker in speakers:
     zone = SoCo(speaker["ip"])
+
+    if zone.household_id in households:
+      households[zone.household_id].append(zone)
+    else:
+      households[zone.household_id]=[zone]
 
     # take snapshot of current state
     zone.snapMedia = Snapshot(zone)
     zone.snapMedia.snapshot()
 
     zone.snapGroup = zone.group
-    zone.unjoin()
 
     # pause if playing
     # Each Sonos group has one coordinator only these can play, pause, etc.
@@ -61,27 +72,28 @@ def initZones(prayer):
         trans_state = zone.get_current_transport_info()
         if trans_state["current_transport_state"] == "PLAYING":
             zone.pause()
+    
+    zone.unjoin()
 
     # For every Sonos player set volume and mute for every zone
     zone.volume = speaker["volume"]
     zone.mute = False
 
-    zones.append(zone)
-
-    t = threading.Thread(target=playPrayer, args = [zone, mediaUri, prayerName])
+    #start making groups here
+  coordinators = []
+  for household in households.values():
+    for idx, zone in enumerate(household):
+      if idx == 0:
+        coordinator=zone
+        coordinators.append(zone)
+      else:
+        zone.join(coordinator)
+  
+  for coordinator in coordinators:
+    t = threading.Thread(target=playPrayer, args = [coordinator, mediaUri, prayerName, households[coordinator.household_id]])
     t.start()
 
-    if restoreImmediately == True:
-      restoreZone(zone)
 
-  if restoreImmediately == False:
-    # all threads have completed so now regroup / restore
-    while threading.active_count() > 1:
-      time.sleep(1)
-
-    # restore the zones
-    for zone in reversed(zones):
-      restoreZone(zone)
 
 
 def getTimings():
@@ -101,7 +113,7 @@ def getTimings():
   
   r = requests.get(url)
   timings = r.json()["data"]["timings"]
-
+  
   print(timings)
 
 
@@ -121,13 +133,13 @@ with open('./config/config.json', 'r') as configjson:
   conf = json.load(configjson)
 
 print("read config")
-restoreImmediately = conf["restoreImmediately"]
 
 # run immetdiately on startup to get timings
 getTimings()
+
 # schedule to refresh times
 schedule.every().day.at(str(conf["timing"]["updateTime"]), str(conf["timing"]["timezone"])).do(getTimings)
 
 while True:
-  schedule.run_pending()
-  time.sleep(1)
+ schedule.run_pending()
+ time.sleep(1)
