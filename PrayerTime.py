@@ -4,7 +4,6 @@ import schedule
 import time
 import json
 
-
 def restoreZone(zone):
   #get the coordinator
   coordinator = zone.snapGroup.coordinator
@@ -94,7 +93,9 @@ def getTimings():
   lon = conf["timing"]["longitude"]
   lat = conf["timing"]["latitude"]
   method = conf["timing"]["method"]
-  school = conf["timing"]["school"] 
+  school = conf["timing"]["school"]
+  timezone = conf["timing"]["timezone"]
+
 
   url = f"http://api.aladhan.com/v1/timingsByAddress/{today}?address={lat},{lon}&method={method}&school={school}"
   
@@ -107,7 +108,7 @@ def getTimings():
   for prayer in conf["prayers"]:
     prayerName = prayer["name"]
     #initZones(prayer)
-    schedule.every().day.at(timings[prayerName]).do(initZones, prayer).tag('prayer', prayerName)
+    schedule.every().day.at(timings[prayerName],timezone).do(initZones, prayer).tag('prayer', prayerName)
 
   print("timings update complete")
 
@@ -125,7 +126,7 @@ restoreImmediately = conf["restoreImmediately"]
 # run immetdiately on startup to get timings
 getTimings()
 # schedule to refresh times
-schedule.every().day.at(str(conf["timing"]["updateTime"])).do(getTimings)
+schedule.every().day.at(str(conf["timing"]["updateTime"]), str(conf["timing"]["timezone"])).do(getTimings)
 
 while True:
   schedule.run_pending()

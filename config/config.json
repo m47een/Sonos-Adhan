@@ -5,7 +5,8 @@
         "longitude": -2.2276166,
         "method": 12,
         "updateTime": "02:15",
-        "school": 1
+        "school": 1,
+        "timezone": "Europe/London"
     },
     "prayers": [
         {
