@@ -1,0 +1,17 @@
+---
+version: "3.8"
+
+services:
+
+  app:
+
+    image: m47een/sonos-adhan:latest
+
+    container_name: sonos-azan
+
+    volumes:
+
+      - sonos-adhan:/app/config/
+
+
+    restart: unless-stopped

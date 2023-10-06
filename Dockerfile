@@ -10,7 +10,6 @@ RUN addgroup -S soco-cli && adduser -S soco-cli -G soco-cli
 USER soco-cli
 
 WORKDIR /app
-VOLUME ./config
 
 # Keeps Python from generating .pyc files in the container
 ENV PYTHONDONTWRITEBYTECODE=1
