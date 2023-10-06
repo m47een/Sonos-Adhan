@@ -27,7 +27,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir --disable-pip-version-check --upgrade pip
 RUN pip install --no-cache-dir -r ./requirements.txt
 
-COPY . /.
+COPY . ./
 
 # During debugging, this entry point will be overridden. For more information, please refer to https://aka.ms/vscode-docker-python-debug
 CMD ["python", "PrayerTime.py"]
