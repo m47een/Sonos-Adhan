@@ -113,7 +113,7 @@ def getTimings():
   
   r = requests.get(url)
   timings = r.json()["data"]["timings"]
-  
+  print(url)
   print(timings)
 
 
