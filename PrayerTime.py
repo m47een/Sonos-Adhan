@@ -109,7 +109,7 @@ def getTimings():
   timezone = conf["timing"]["timezone"]
 
 
-  url = f"http://api.aladhan.com/v1/timingsByAddress/{today}?address={lat},{lon}&method={method}&school={school}"
+  url = f"http://api.aladhan.com/v1/timingsByAddress/{today}?address={lat},{lon}&method={method}&school={school}&timezonestring={timezone}"
   
   r = requests.get(url)
   timings = r.json()["data"]["timings"]
