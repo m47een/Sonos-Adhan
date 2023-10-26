@@ -101,21 +101,22 @@ def getTimings():
   # clear any existing prayers from the schedule as about to be refreshed
   schedule.clear('prayer')
 
-  today = date.today().strftime("%Y-%m-%d")
+  today = date.today().strftime("%d-%m-%Y")
   lon = conf["timing"]["longitude"]
   lat = conf["timing"]["latitude"]
   method = conf["timing"]["method"]
   school = conf["timing"]["school"]
   timezone = conf["timing"]["timezone"]
 
+  print(today)
 
-  url = f"http://api.aladhan.com/v1/timingsByAddress/{today}?address={lat},{lon}&method={method}&school={school}&timezonestring={timezone}"
-  
+  url = f"https://api.aladhan.com/v1/timingsByAddress/{today}?address={lat},{lon}&method={method}&school={school}&timezonestring={timezone}"
+
   r = requests.get(url)
   timings = r.json()["data"]["timings"]
+  
   print(url)
   print(timings)
-
 
   for prayer in conf["prayers"]:
     prayerName = prayer["name"]
